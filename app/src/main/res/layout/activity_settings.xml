@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <!--<TextView-->
+        <!--android:id="@+id/settings_vibration"-->
+        <!--android:layout_width="94dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginTop="11dp"-->
+        <!--android:text=" Vibration"-->
+        <!--android:textColor="#121216"-->
+        <!--android:textSize="20dp"-->
+        <!--tools:layout_editor_absoluteX="16dp"-->
+        <!--tools:layout_editor_absoluteY="66dp" />-->
+
+    <!--<Switch-->
+        <!--android:id="@+id/vibration_switch"-->
+        <!--android:layout_width="51dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginStart="25dp"-->
+        <!--android:layout_marginTop="11dp"-->
+        <!--android:layout_toEndOf="@+id/Volume"-->
+        <!--tools:layout_editor_absoluteX="241dp"-->
+        <!--tools:layout_editor_absoluteY="65dp" />-->
+
+    <TextView
+        android:id="@+id/Volume"
+        android:layout_width="97dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="19dp"
+        android:text=" Volume"
+        android:textColor="#121216"
+        android:textSize="20dp" />
+
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="-226dp"
+        android:layout_toEndOf="@+id/Volume"
+        android:max="100"
+        android:minWidth="250px" />
+
+    <TextView
+        android:id="@+id/lounchBy"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="56dp"
+        android:text=" Launch By"
+        android:textColor="#121216"
+        android:textSize="20dp" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="57dp"
+        android:layout_toEndOf="@+id/lounchBy" />
+
+
+</RelativeLayout>
