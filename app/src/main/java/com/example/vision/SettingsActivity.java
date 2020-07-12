@@ -1,15 +1,21 @@
 package com.example.vision;
 
+import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private AudioManager audioManager;
+    private SharedPreferences pref;
+    private  SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +35,32 @@ public class SettingsActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        SeekBar seekBar = findViewById(R.id.seekbar);
+
+        pref = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
+        editor = pref.edit();
+
+        audioManager = (AudioManager) getSystemService(this.getApplicationContext().AUDIO_SERVICE);
+
+        seekBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int newVolume, boolean b) {
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
+
+                //set volume value into shared memory
+                editor.putInt("VolumeValue", newVolume);
+                editor.commit();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
 
     }
 

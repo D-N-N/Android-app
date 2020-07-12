@@ -1,6 +1,10 @@
 package com.example.vision;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,13 +22,14 @@ import android.widget.Toast;
 
 import com.example.vision.Fragment.CurrencyFragment;
 import com.example.vision.Fragment.TextFragment;
+import com.example.vision.Settings.vibretor;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private TabLayout tableLayout;
-
+    public int VolumeValue = 0;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -63,6 +68,17 @@ public class MainActivity extends AppCompatActivity {
         viewpagerAdapter.addFragment(currencyFragment,"Currency");
         viewpagerAdapter.addFragment(textFragment,"Text");
 
+        /*start vibrate*/
+        vibretor vibretor = new vibretor(1000,getApplicationContext());
+        vibretor.execute();
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
+        SharedPreferences.Editor editor = pref.edit();
+
+        // set volume value from shared memory
+        VolumeValue = pref.getInt("VolumeValue", -1);
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
 
         viewPager.setAdapter(viewpagerAdapter);
 
@@ -72,14 +88,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Toast.makeText(getApplicationContext(),tab.getPosition()+"",Toast.LENGTH_LONG).show();
+
+                /*create vibrate*/
+                vibretor vibretor = new vibretor(1000,getApplicationContext());
+
                 switch (tab.getPosition()){
 
                     case 0:
-
+                        vibretor.execute();
                         textFragment.onPause();
                         currencyFragment.onStart();
                         break;
                     case 1:
+                        /*start vibrate*/
+                        vibretor.execute();
                         currencyFragment.onPause();
                         textFragment.onStart();
                         break;
