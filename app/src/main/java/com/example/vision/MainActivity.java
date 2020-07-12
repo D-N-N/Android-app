@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
+import com.camerakit.CameraKitView;
 import com.example.vision.Fragment.CurrencyFragment;
 import com.example.vision.Fragment.TextFragment;
 import com.example.vision.Settings.vibretor;
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tableLayout;
     public int VolumeValue = 0;
     private SpeechService speechService;
+    private CameraKitView cameraKitView;
+    private CurrencyFragment currencyFragment;
+    private TextFragment textFragment;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -67,8 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
        tableLayout = findViewById(R.id.tab_layput);
        ViewPager viewPager = findViewById(R.id.view_pager);
-       final CurrencyFragment currencyFragment = new CurrencyFragment();
-       final TextFragment textFragment = new TextFragment();
+       currencyFragment = new CurrencyFragment();
+       textFragment = new TextFragment();
+
+        cameraKitView = findViewById(R.id.camera_Text);
 
         ViewpagerAdapter viewpagerAdapter = new ViewpagerAdapter(getSupportFragmentManager());
 
