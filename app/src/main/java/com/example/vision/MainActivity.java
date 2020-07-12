@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TabLayout tableLayout;
     public int VolumeValue = 0;
+    private SpeechService speechService;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -40,12 +41,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+        vibretor vibretor = new vibretor(500,getApplicationContext());
+        speechService = new SpeechService(this);
+
         if (id == R.id.setting_settings) {
+            vibretor.execute();
+            speechService.textToSpeech("Settings is open");
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
         }else if(id == R.id.help_settings){
-
+            vibretor.execute();
+            speechService.textToSpeech("Help is open");
             Intent intent = new Intent(MainActivity.this, HelpActivity.class);
             startActivity(intent);
             return true;
@@ -68,8 +75,12 @@ public class MainActivity extends AppCompatActivity {
         viewpagerAdapter.addFragment(currencyFragment,"Currency");
         viewpagerAdapter.addFragment(textFragment,"Text");
 
+        //speech
+        speechService = new SpeechService(this);
+        speechService.textToSpeech("Application started");
+
         /*start vibrate*/
-        vibretor vibretor = new vibretor(1000,getApplicationContext());
+        vibretor vibretor = new vibretor(500,getApplicationContext());
         vibretor.execute();
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
@@ -90,16 +101,18 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),tab.getPosition()+"",Toast.LENGTH_LONG).show();
 
                 /*create vibrate*/
-                vibretor vibretor = new vibretor(1000,getApplicationContext());
+                vibretor vibretor = new vibretor(500,getApplicationContext());
 
                 switch (tab.getPosition()){
 
                     case 0:
+                        speechService.textToSpeech("Currency detection camera open");
                         vibretor.execute();
                         textFragment.onPause();
                         currencyFragment.onStart();
                         break;
                     case 1:
+                        speechService.textToSpeech("Text detection camera open");
                         /*start vibrate*/
                         vibretor.execute();
                         currencyFragment.onPause();

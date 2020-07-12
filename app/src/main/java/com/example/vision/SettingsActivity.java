@@ -11,11 +11,15 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
+import com.example.vision.Settings.vibretor;
+
 public class SettingsActivity extends AppCompatActivity {
 
     private AudioManager audioManager;
     private SharedPreferences pref;
     private  SharedPreferences.Editor editor;
+    private vibretor vibretor;
+    private SpeechService speechService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,21 +42,32 @@ public class SettingsActivity extends AppCompatActivity {
 
         SeekBar seekBar = findViewById(R.id.seekbar);
 
+
+
+        vibretor = new vibretor(500,getApplicationContext());
+
         pref = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
         editor = pref.edit();
 
         audioManager = (AudioManager) getSystemService(this.getApplicationContext().AUDIO_SERVICE);
 
         seekBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+        seekBar.setProgress(pref.getInt("VolumeValue", -1));
+
+        speechService = new SpeechService(this);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int newVolume, boolean b) {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, newVolume, 0);
 
+                //speech
+                speechService.textToSpeech("Set volume as "+newVolume);
+
                 //set volume value into shared memory
                 editor.putInt("VolumeValue", newVolume);
                 editor.commit();
+                vibretor.execute();
             }
 
             @Override
