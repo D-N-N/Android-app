@@ -122,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        String text = "hello world";
+//        SpeechService sp = new SpeechService(this);
+//        sp.textToSpeech(text);
+
 
 
     }
