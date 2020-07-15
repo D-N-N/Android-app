@@ -4,11 +4,15 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
 public class service extends Service {
+    BroadcastReceiver mReceiver;
+    IntentFilter filter;
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -17,25 +21,33 @@ public class service extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
 
-        final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_MEDIA_BUTTON);
-        final BroadcastReceiver mReceiver = new Receiver();
+        mReceiver = new Receiver();
         registerReceiver(mReceiver, filter);
 
         return START_STICKY;
     }
     @Override
     public void onDestroy() {
+
+        unregisterReceiver(mReceiver);
         super.onDestroy();
 
         Intent broadcastIntent = new Intent(this, RestartService.class);
-        sendBroadcast(broadcastIntent);
+        this.sendBroadcast(broadcastIntent);
 
         Toast.makeText(this, "Service destroyed by user.", Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        Intent intent = new Intent(this,RestartService.class);
+        sendBroadcast(intent);
+        super.onTaskRemoved(rootIntent);
+    }
 
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+    //    public boolean onKeyDown(int keyCode, KeyEvent event) {
 //        if(event.getAction() == KeyEvent.ACTION_DOWN) {
 //
 //            Intent dialogIntent = new Intent(this,MainActivity.class);

@@ -91,11 +91,11 @@ public class SettingsActivity extends AppCompatActivity {
                 if(prefAppStartKey.getInt("AppStartKey", 0) != position) {
                     editorAppStartKey.putInt("AppStartKey", position);
                     editorAppStartKey.commit();
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        SettingsActivity.this.startForegroundService(new Intent(SettingsActivity.this, service.class));
-                    } else {
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                        SettingsActivity.this.startForegroundService(new Intent(SettingsActivity.this, service.class));
+//                    } else {
                         startService(new Intent(SettingsActivity.this, service.class));
-                    }
+                    //}
                     if (position == 0) {
                         speechService.textToSpeech("set power button to start application");
                     } else if (position == 1) {

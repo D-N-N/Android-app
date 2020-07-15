@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
         ViewpagerAdapter viewpagerAdapter = new ViewpagerAdapter(getSupportFragmentManager());
 
         //start background service
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            MainActivity.this.startForegroundService(new Intent(MainActivity.this, service.class));
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            MainActivity.this.startForegroundService(new Intent(MainActivity.this, service.class));
+//        } else {
             startService(new Intent(MainActivity.this, service.class));
-        }
+        //}
 
         viewpagerAdapter.addFragment(currencyFragment,"Currency");
         viewpagerAdapter.addFragment(textFragment,"Text");
