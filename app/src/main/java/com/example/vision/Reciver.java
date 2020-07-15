@@ -35,6 +35,12 @@ class Receiver extends BroadcastReceiver {
                 context.startActivity(i);
             }
 
+        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+
+                Intent i = new Intent(context, MainActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                i.putExtra("powerOn",false);
+                context.startActivity(i);
         }
     }
 }

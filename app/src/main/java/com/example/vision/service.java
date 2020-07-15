@@ -21,13 +21,19 @@ public class service extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
 
+        return START_STICKY;
+    }
+
+    @Override
+    public void onCreate() {
         filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_MEDIA_BUTTON);
         mReceiver = new Receiver();
         registerReceiver(mReceiver, filter);
-
-        return START_STICKY;
+        super.onCreate();
     }
+
     @Override
     public void onDestroy() {
 
