@@ -1,6 +1,9 @@
 package com.example.vision;
 
 import android.app.Activity;
+import android.app.Application;
+import android.widget.Toast;
+
 import com.mapzen.speakerbox.Speakerbox;
 
 public class SpeechService {
@@ -15,7 +18,13 @@ public class SpeechService {
 
     public void textToSpeech(String txt){
 
-        speakerbox = new Speakerbox(activity.getApplication());
-        speakerbox.play(txt);
+        try {
+            speakerbox = new Speakerbox(activity.getApplication());
+            speakerbox.play(txt);
+
+        }catch (Exception e){
+            Toast.makeText(activity.getApplicationContext(),e+"",Toast.LENGTH_LONG).show();
+
+        }
     }
 }
