@@ -1,5 +1,6 @@
 package com.example.vision;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.support.v4.app.NavUtils;
@@ -7,6 +8,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -16,8 +19,8 @@ import com.example.vision.Settings.vibretor;
 public class SettingsActivity extends AppCompatActivity {
 
     private AudioManager audioManager;
-    private SharedPreferences pref;
-    private  SharedPreferences.Editor editor;
+    private SharedPreferences prefVolume,prefAppStartKey;
+    private  SharedPreferences.Editor editorVolume,editorAppStartKey;
     private vibretor vibretor;
     private SpeechService speechService;
     @Override
@@ -46,13 +49,16 @@ public class SettingsActivity extends AppCompatActivity {
 
         vibretor = new vibretor(500,getApplicationContext());
 
-        pref = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
-        editor = pref.edit();
+        prefVolume = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
+        editorVolume = prefVolume.edit();
+
+        prefAppStartKey = getApplicationContext().getSharedPreferences("AppStartKey", 0); // 0 - for private mode
+        editorAppStartKey = prefAppStartKey.edit();
 
         audioManager = (AudioManager) getSystemService(this.getApplicationContext().AUDIO_SERVICE);
 
         seekBar.setMax(audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
-        seekBar.setProgress(pref.getInt("VolumeValue", -1));
+        seekBar.setProgress(prefVolume.getInt("VolumeValue", -1));
 
         speechService = new SpeechService(this);
 
@@ -65,8 +71,8 @@ public class SettingsActivity extends AppCompatActivity {
                 speechService.textToSpeech("Set volume as "+newVolume);
 
                 //set volume value into shared memory
-                editor.putInt("VolumeValue", newVolume);
-                editor.commit();
+                editorVolume.putInt("VolumeValue", newVolume);
+                editorVolume.commit();
                 vibretor.execute();
             }
 
@@ -77,6 +83,28 @@ public class SettingsActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
+        spinner.setSelection(prefAppStartKey.getInt("AppStartKey", 0));// set selected previous value in spinner
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if(prefAppStartKey.getInt("AppStartKey", 0) != position) {
+                    editorAppStartKey.putInt("AppStartKey", position);
+                    editorAppStartKey.commit();
+                    startService(new Intent(SettingsActivity.this, service.class));
+                    if (position == 0) {
+                        speechService.textToSpeech("set power button to start application");
+                    } else if (position == 1) {
+                        speechService.textToSpeech("set media button to start application");
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
     }
 
     @Override

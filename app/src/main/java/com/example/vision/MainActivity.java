@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -17,10 +16,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.TableLayout;
 import android.widget.Toast;
 
-import com.camerakit.CameraKitView;
 import com.example.vision.Fragment.CurrencyFragment;
 import com.example.vision.Fragment.TextFragment;
 import com.example.vision.Settings.vibretor;
@@ -32,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tableLayout;
     public int VolumeValue = 0;
     private SpeechService speechService;
-    private CameraKitView cameraKitView;
     private CurrencyFragment currencyFragment;
     private TextFragment textFragment;
     @Override
@@ -74,8 +70,6 @@ public class MainActivity extends AppCompatActivity {
        currencyFragment = new CurrencyFragment();
        textFragment = new TextFragment();
 
-        cameraKitView = findViewById(R.id.camera_Text);
-
         ViewpagerAdapter viewpagerAdapter = new ViewpagerAdapter(getSupportFragmentManager());
 
         startService(new Intent(MainActivity.this,service.class));
@@ -86,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
         //speech
         speechService = new SpeechService(this);
         speechService.textToSpeech("Application started");
+
 
         /*start vibrate*/
         vibretor vibretor = new vibretor(500,getApplicationContext());
@@ -106,11 +101,8 @@ public class MainActivity extends AppCompatActivity {
         tableLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Toast.makeText(getApplicationContext(),tab.getPosition()+"",Toast.LENGTH_LONG).show();
-
                 /*create vibrate*/
                 vibretor vibretor = new vibretor(500,getApplicationContext());
-
                 switch (tab.getPosition()){
 
                     case 0:
@@ -142,11 +134,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-//        String text = "hello world";
-//        SpeechService sp = new SpeechService(this);
-//        sp.textToSpeech(text);
-
 
 
     }

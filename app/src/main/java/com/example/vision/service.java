@@ -1,7 +1,9 @@
 package com.example.vision;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.view.KeyEvent;
 import android.widget.Toast;
@@ -14,6 +16,13 @@ public class service extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
+
+        final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_USER_PRESENT);
+        final BroadcastReceiver mReceiver = new Receiver();
+        registerReceiver(mReceiver, filter);
+
         return START_STICKY;
     }
     @Override
