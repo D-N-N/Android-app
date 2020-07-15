@@ -1,9 +1,11 @@
 package com.example.vision;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,6 +24,7 @@ import com.example.vision.Fragment.CurrencyFragment;
 import com.example.vision.Fragment.TextFragment;
 import com.example.vision.Settings.vibretor;
 
+import java.security.Provider;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -72,7 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
         ViewpagerAdapter viewpagerAdapter = new ViewpagerAdapter(getSupportFragmentManager());
 
-        startService(new Intent(MainActivity.this,service.class));
+        //start background service
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            MainActivity.this.startForegroundService(new Intent(MainActivity.this, service.class));
+        } else {
+            startService(new Intent(MainActivity.this, service.class));
+        }
 
         viewpagerAdapter.addFragment(currencyFragment,"Currency");
         viewpagerAdapter.addFragment(textFragment,"Text");

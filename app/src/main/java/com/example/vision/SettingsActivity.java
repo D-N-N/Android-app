@@ -3,6 +3,7 @@ package com.example.vision;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.os.Build;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -90,7 +91,11 @@ public class SettingsActivity extends AppCompatActivity {
                 if(prefAppStartKey.getInt("AppStartKey", 0) != position) {
                     editorAppStartKey.putInt("AppStartKey", position);
                     editorAppStartKey.commit();
-                    startService(new Intent(SettingsActivity.this, service.class));
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        SettingsActivity.this.startForegroundService(new Intent(SettingsActivity.this, service.class));
+                    } else {
+                        startService(new Intent(SettingsActivity.this, service.class));
+                    }
                     if (position == 0) {
                         speechService.textToSpeech("set power button to start application");
                     } else if (position == 1) {

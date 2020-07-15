@@ -18,8 +18,7 @@ public class service extends Service {
         Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
 
         final IntentFilter filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(Intent.ACTION_USER_PRESENT);
+        filter.addAction(Intent.ACTION_MEDIA_BUTTON);
         final BroadcastReceiver mReceiver = new Receiver();
         registerReceiver(mReceiver, filter);
 
@@ -28,6 +27,10 @@ public class service extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        Intent broadcastIntent = new Intent(this, RestartService.class);
+        sendBroadcast(broadcastIntent);
+
         Toast.makeText(this, "Service destroyed by user.", Toast.LENGTH_LONG).show();
     }
 
