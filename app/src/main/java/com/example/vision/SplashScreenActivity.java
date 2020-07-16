@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.example.vision.Settings.vibretor;
 
@@ -17,7 +18,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         SpeechService speechService = new SpeechService(this);
         speechService.textToSpeech("Application sleep");
 
-        android.support.constraint.ConstraintLayout layout = (android.support.constraint.ConstraintLayout)findViewById(R.id.splash);
+        RelativeLayout layout = (RelativeLayout)findViewById(R.id.splash);
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
