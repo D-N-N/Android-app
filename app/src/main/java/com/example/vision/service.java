@@ -28,6 +28,7 @@ public class service extends Service {
     public void onCreate() {
         filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_BOOT_COMPLETED);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_MEDIA_BUTTON);
         mReceiver = new Receiver();
         registerReceiver(mReceiver, filter);

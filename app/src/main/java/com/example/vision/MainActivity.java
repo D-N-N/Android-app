@@ -87,11 +87,7 @@ public class MainActivity extends AppCompatActivity {
 
         //speech
         speechService = new SpeechService(this);
-        if(getIntent().getBooleanExtra("powerOn",true) == true) {
-            speechService.textToSpeech("Application started");
-        }else {
-            speechService.textToSpeech("Application sleep");
-        }
+        speechService.textToSpeech("Application started");
 
 
         /*start vibrate*/
