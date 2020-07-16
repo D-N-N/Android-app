@@ -97,9 +97,9 @@ public class SettingsActivity extends AppCompatActivity {
                         startService(new Intent(SettingsActivity.this, service.class));
                     //}
                     if (position == 0) {
-                        speechService.textToSpeech("set power button to start application");
+                        speechService.textToSpeech("start application when screen on");
                     } else if (position == 1) {
-                        speechService.textToSpeech("set media button to start application");
+                        speechService.textToSpeech("start application when media connect");
                     }
                 }
             }

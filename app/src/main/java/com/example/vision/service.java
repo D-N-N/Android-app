@@ -27,7 +27,7 @@ public class service extends Service {
     @Override
     public void onCreate() {
         filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
+        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_MEDIA_BUTTON);
         mReceiver = new Receiver();

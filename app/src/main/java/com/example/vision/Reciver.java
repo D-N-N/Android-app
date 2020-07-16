@@ -28,7 +28,7 @@ class Receiver extends BroadcastReceiver {
             }
 
         }
-        else if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
+        else if (intent.getAction().equals(Intent.ACTION_MEDIA_MOUNTED)) {
 
             if(prefAppStartKey.getInt("AppStartKey", 0) == 1) {
                 Intent i = new Intent(context, MainActivity.class);

@@ -6,7 +6,7 @@
 
     <string-array name="planets_array">
         <item>Screen ON</item>
-        <item>Restart Mobile</item>
+        <item>Media Connect</item>
 
     </string-array>
 </resources>

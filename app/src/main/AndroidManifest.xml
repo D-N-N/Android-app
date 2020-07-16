@@ -30,7 +30,7 @@
             android:label="RestartServiceWhenStopped">
             <intent-filter>
             <action android:name="android.intent.action.USER_PRESENT" />
-            <action android:name="android.intent.action.BOOT_COMPLETED" />
+            <action android:name="android.intent.action.ACTION_MEDIA_MOUNTED" />
             <action android:name="android.intent.action.ACTION_SCREEN_ON"/>
             <action android:name="android.intent.action.ACTION_SCREEN_OFF"/>
             </intent-filter>
