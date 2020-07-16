@@ -20,7 +20,7 @@ class Receiver extends BroadcastReceiver {
 
 //        Log.e("LOB", "Value "+prefAppStartKey.getInt("AppStartKey", 1)+"");
 
-        if (intent.getAction().equals(Intent.ACTION_MEDIA_BUTTON)) {
+        if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
 
             if(prefAppStartKey.getInt("AppStartKey", 0) == 1) {
                 Intent i = new Intent(context, MainActivity.class);
@@ -35,12 +35,13 @@ class Receiver extends BroadcastReceiver {
                 context.startActivity(i);
             }
 
-        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
-
-                Intent i = new Intent(context, MainActivity.class);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                i.putExtra("powerOn",false);
-                context.startActivity(i);
         }
+//        else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+//
+//                Intent i = new Intent(context, MainActivity.class);
+//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                i.putExtra("powerOn",false);
+//                context.startActivity(i);
+//        }
     }
 }

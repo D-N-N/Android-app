@@ -5,8 +5,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string-array name="planets_array">
-        <item>Power Button</item>
-        <item>Media Button</item>
+        <item>Screen ON</item>
+        <item>Restart Mobile</item>
 
     </string-array>
 </resources>
