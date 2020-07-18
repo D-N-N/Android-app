@@ -11,9 +11,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.media.AudioManager;
-import android.os.SystemClock;
-import android.support.design.widget.TabLayout;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -21,22 +20,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.dnn.vision.Fragment.CurrencyFragment;
-import com.dnn.vision.Fragment.TextFragment;
 import com.dnn.vision.Settings.VibrationModule;
-import com.dnn.vision.R;
 import com.dnn.vision.Utilities.BorderedText;
 import com.dnn.vision.Utilities.ImageUtils;
+import com.dnn.vision.Utilities.Logger;
+import com.dnn.vision.Utilities.MultiBoxTracker;
 import com.dnn.vision.customview.OverlayView;
 import com.dnn.vision.tflite.Classifier;
 import com.dnn.vision.tflite.TFLiteClassifier;
-import com.dnn.vision.Utilities.MultiBoxTracker;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.dnn.vision.Utilities.Logger;
 
 public class MainActivity extends CameraActivity
 {
@@ -52,7 +47,7 @@ public class MainActivity extends CameraActivity
     // Minimum detection confidence to track a detection.
     private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.8f;
     private static final boolean MAINTAIN_ASPECT = false;
-    private static final Size DESIRED_PREVIEW_SIZE = new Size(480,640);
+    private static final Size DESIRED_PREVIEW_SIZE = new Size(480, 640);
     private static final boolean SAVE_PREVIEW_BITMAP = false;
     private static final float TEXT_SIZE_DIP = 10;
     OverlayView trackingOverlay;
@@ -75,13 +70,8 @@ public class MainActivity extends CameraActivity
     private MultiBoxTracker tracker;
 
     private BorderedText borderedText;
-
-
-    private TabLayout tableLayout;
     public int VolumeValue = 0;
     private SpeechService speechService;
-    private CurrencyFragment currencyFragment;
-    private TextFragment textFragment;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -119,15 +109,8 @@ public class MainActivity extends CameraActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-       super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-
-//       tableLayout = findViewById(R.id.tab_layput);
-//       ViewPager viewPager = findViewById(R.id.view_pager);
-//       currencyFragment = new CurrencyFragment();
-//       textFragment = new TextFragment();
-//
-//        ViewpagerAdapter viewpagerAdapter = new ViewpagerAdapter(getSupportFragmentManager());
 
         //start background BackgroundService
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -136,8 +119,6 @@ public class MainActivity extends CameraActivity
         startService(new Intent(MainActivity.this, BackgroundService.class));
         //}
 
-//        viewpagerAdapter.addFragment(currencyFragment,"Currency");
-//        viewpagerAdapter.addFragment(textFragment,"Text");
 
         //speech
         speechService = new SpeechService(this);
@@ -156,92 +137,9 @@ public class MainActivity extends CameraActivity
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
 
-//        viewPager.setAdapter(viewpagerAdapter);
-//
-//        tableLayout.setupWithViewPager(viewPager);
-//
-//        tableLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                /*create vibrate*/
-//                VibrationModule VibrationModule = new VibrationModule(500,getApplicationContext());
-//                switch (tab.getPosition()){
-//
-//                    case 0:
-//                        speechService.textToSpeech("Currency detection camera open");
-//                        VibrationModule.execute();
-//                        textFragment.onPause();
-//                        currencyFragment.onStart();
-//                        break;
-//                    case 1:
-//                        speechService.textToSpeech("Text detection camera open");
-//                        /*start vibrate*/
-//                        VibrationModule.execute();
-//                        currencyFragment.onPause();
-//                        textFragment.onStart();
-//                        break;
-//
-//
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
-
 
     }
 
-//    class ViewpagerAdapter extends FragmentPagerAdapter
-//    {
-//
-//
-//        private ArrayList<Fragment> fragments;
-//        private ArrayList<String> titles;
-//
-//        ViewpagerAdapter(FragmentManager fm)
-//        {
-//            super(fm);
-//
-//            this.fragments = new ArrayList<>();
-//            this.titles = new ArrayList<>();
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position)
-//        {
-//            return fragments.get(position);
-//        }
-//
-//        @Override
-//        public int getCount()
-//        {
-//            return fragments.size();
-//        }
-//
-//        public void addFragment(Fragment fragment, String title)
-//        {
-//            fragments.add(fragment);
-//            titles.add(title);
-//        }
-//
-//        @Nullable
-//        @Override
-//        public CharSequence getPageTitle(int position)
-//        {
-//            return titles.get(position);
-//        }
-//    }
-
-    int Tab_Index = 0;
 
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event)
@@ -319,7 +217,7 @@ public class MainActivity extends CameraActivity
         cropToFrameTransform = new Matrix();
         frameToCropTransform.invert(cropToFrameTransform);
 
-        trackingOverlay = (OverlayView) findViewById(R.id.tracking_overlay);
+        trackingOverlay = findViewById(R.id.tracking_overlay);
         trackingOverlay.addCallback(
                 new OverlayView.DrawCallback()
                 {
