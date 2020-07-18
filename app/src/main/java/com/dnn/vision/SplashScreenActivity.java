@@ -7,7 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.dnn.vision.Settings.vibretor;
+import com.dnn.vision.Settings.VibrationModule;
 import com.dnn.vision.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
@@ -26,8 +26,8 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Thread loading = new Thread() {
                     public void run() {
                         try {
-                            vibretor vibretor = new vibretor(500,getApplicationContext());
-                            vibretor.execute();
+                            VibrationModule VibrationModule = new VibrationModule(500,getApplicationContext());
+                            VibrationModule.execute();
                             Intent main = new Intent(SplashScreenActivity.this,MainActivity.class);
                             startActivity(main);
                             finish();

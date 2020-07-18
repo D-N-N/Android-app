@@ -5,10 +5,11 @@ import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 
-public class vibretor {
+public class VibrationModule
+{
     private int Seconds = 0;
     Context mContext;
-    public vibretor(int seconds,Context mContext){
+    public VibrationModule(int seconds, Context mContext){
         this.Seconds = seconds;
         this.mContext = mContext;
     }

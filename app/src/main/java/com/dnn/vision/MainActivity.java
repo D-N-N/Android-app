@@ -19,7 +19,7 @@ import android.view.MenuItem;
 
 import com.dnn.vision.Fragment.CurrencyFragment;
 import com.dnn.vision.Fragment.TextFragment;
-import com.dnn.vision.Settings.vibretor;
+import com.dnn.vision.Settings.VibrationModule;
 import com.dnn.vision.R;
 
 import java.util.ArrayList;
@@ -41,17 +41,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        vibretor vibretor = new vibretor(500,getApplicationContext());
+        VibrationModule VibrationModule = new VibrationModule(500,getApplicationContext());
         speechService = new SpeechService(this);
 
         if (id == R.id.setting_settings) {
-            vibretor.execute();
+            VibrationModule.execute();
             speechService.textToSpeech("Settings is open");
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
         }else if(id == R.id.help_settings){
-            vibretor.execute();
+            VibrationModule.execute();
             speechService.textToSpeech("Help is open");
             Intent intent = new Intent(MainActivity.this, HelpActivity.class);
             startActivity(intent);
@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         /*start vibrate*/
-        vibretor vibretor = new vibretor(500,getApplicationContext());
-        vibretor.execute();
+        VibrationModule VibrationModule = new VibrationModule(500,getApplicationContext());
+        VibrationModule.execute();
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
         SharedPreferences.Editor editor = pref.edit();
@@ -107,19 +107,19 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 /*create vibrate*/
-                vibretor vibretor = new vibretor(500,getApplicationContext());
+                VibrationModule VibrationModule = new VibrationModule(500,getApplicationContext());
                 switch (tab.getPosition()){
 
                     case 0:
                         speechService.textToSpeech("Currency detection camera open");
-                        vibretor.execute();
+                        VibrationModule.execute();
                         textFragment.onPause();
                         currencyFragment.onStart();
                         break;
                     case 1:
                         speechService.textToSpeech("Text detection camera open");
                         /*start vibrate*/
-                        vibretor.execute();
+                        VibrationModule.execute();
                         currencyFragment.onPause();
                         textFragment.onStart();
                         break;

@@ -13,7 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
-import com.dnn.vision.Settings.vibretor;
+import com.dnn.vision.Settings.VibrationModule;
 import com.dnn.vision.R;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -21,7 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     private AudioManager audioManager;
     private SharedPreferences prefVolume,prefAppStartKey;
     private  SharedPreferences.Editor editorVolume,editorAppStartKey;
-    private vibretor vibretor;
+    private VibrationModule VibrationModule;
     private SpeechService speechService;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 
 
-        vibretor = new vibretor(500,getApplicationContext());
+        VibrationModule = new VibrationModule(500,getApplicationContext());
 
         prefVolume = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
         editorVolume = prefVolume.edit();
@@ -73,7 +73,7 @@ public class SettingsActivity extends AppCompatActivity {
                 //set volume value into shared memory
                 editorVolume.putInt("VolumeValue", newVolume);
                 editorVolume.commit();
-                vibretor.execute();
+                VibrationModule.execute();
             }
 
             @Override
