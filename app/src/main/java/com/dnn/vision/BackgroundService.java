@@ -7,7 +7,7 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.widget.Toast;
 
-public class service extends Service {
+public class BackgroundService extends Service {
     BroadcastReceiver mReceiver;
     IntentFilter filter;
     @Override

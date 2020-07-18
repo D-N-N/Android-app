@@ -91,9 +91,9 @@ public class SettingsActivity extends AppCompatActivity {
                     editorAppStartKey.putInt("AppStartKey", position);
                     editorAppStartKey.commit();
 //                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                        SettingsActivity.this.startForegroundService(new Intent(SettingsActivity.this, service.class));
+//                        SettingsActivity.this.startForegroundService(new Intent(SettingsActivity.this, BackgroundService.class));
 //                    } else {
-                        startService(new Intent(SettingsActivity.this, service.class));
+                        startService(new Intent(SettingsActivity.this, BackgroundService.class));
                     //}
                     if (position == 0) {
                         speechService.textToSpeech("start application when screen on");

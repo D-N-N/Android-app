@@ -12,17 +12,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.dnn.vision.HelpActivity"></activity>
-        <activity android:name="com.dnn.vision.SplashScreenActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
+        <activity android:name="com.dnn.vision.HelpActivity" />
+        <activity
+            android:name="com.dnn.vision.SplashScreenActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name="com.dnn.vision.SettingsActivity" />
         <activity android:name="com.dnn.vision.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name = "com.dnn.vision.service" android:enabled="true"/>
+        <service android:name = "com.dnn.vision.BackgroundService" android:enabled="true"/>
         <receiver
             android:name="com.dnn.vision.RestartService"
             android:enabled="true"
