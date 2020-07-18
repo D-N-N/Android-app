@@ -14,6 +14,7 @@ import android.media.AudioManager;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -52,7 +53,7 @@ public class MainActivity extends CameraActivity
     // Minimum detection confidence to track a detection.
     private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.8f;
     private static final boolean MAINTAIN_ASPECT = false;
-    private static final Size DESIRED_PREVIEW_SIZE = new Size(1080, 2020);
+    private static Size DESIRED_PREVIEW_SIZE;
     private static final boolean SAVE_PREVIEW_BITMAP = false;
     private static final float TEXT_SIZE_DIP = 10;
     OverlayView trackingOverlay;
@@ -119,6 +120,7 @@ public class MainActivity extends CameraActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        DESIRED_PREVIEW_SIZE = getDeviceScreenSize();
         super.onCreate(savedInstanceState);
 
 
@@ -427,6 +429,13 @@ public class MainActivity extends CameraActivity
     protected Size getDesiredPreviewFrameSize()
     {
         return DESIRED_PREVIEW_SIZE;
+    }
+
+    private Size getDeviceScreenSize()
+    {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        return new Size(displayMetrics.widthPixels,displayMetrics.heightPixels);
     }
 
     // Which detection model to use: by default uses Tensorflow Object Detection API frozen

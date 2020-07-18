@@ -7,22 +7,28 @@ import android.content.IntentFilter;
 import android.os.IBinder;
 import android.widget.Toast;
 
-public class BackgroundService extends Service {
+public class BackgroundService extends Service
+{
     BroadcastReceiver mReceiver;
     IntentFilter filter;
+
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent)
+    {
         return null;
     }
+
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
         Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
 
         return START_STICKY;
     }
 
     @Override
-    public void onCreate() {
+    public void onCreate()
+    {
         filter = new IntentFilter(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
@@ -33,7 +39,8 @@ public class BackgroundService extends Service {
     }
 
     @Override
-    public void onDestroy() {
+    public void onDestroy()
+    {
 
         unregisterReceiver(mReceiver);
         super.onDestroy();
@@ -45,8 +52,9 @@ public class BackgroundService extends Service {
     }
 
     @Override
-    public void onTaskRemoved(Intent rootIntent) {
-        Intent intent = new Intent(this,RestartService.class);
+    public void onTaskRemoved(Intent rootIntent)
+    {
+        Intent intent = new Intent(this, RestartService.class);
         sendBroadcast(intent);
         super.onTaskRemoved(rootIntent);
     }
