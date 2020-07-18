@@ -7,7 +7,7 @@ import android.os.Vibrator;
 
 public class VibrationModule
 {
-    private int Seconds = 0;
+    private int Seconds;
     Context mContext;
     public VibrationModule(int seconds, Context mContext){
         this.Seconds = seconds;
