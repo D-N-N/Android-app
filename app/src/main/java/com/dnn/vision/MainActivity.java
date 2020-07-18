@@ -13,11 +13,15 @@ import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.dnn.vision.Settings.VibrationModule;
@@ -72,6 +76,23 @@ public class MainActivity extends CameraActivity
     private BorderedText borderedText;
     public int VolumeValue = 0;
     private SpeechService speechService;
+    private GestureDetector mDetector;
+    protected VibrationModule vibrationModule;
+
+    View.OnTouchListener touchListener = new View.OnTouchListener()
+    {
+        @Override
+        public boolean onTouch(View v, MotionEvent event)
+        {
+            // pass the events to the gesture detector
+            // a return value of true means the detector is handling it
+            // a return value of false means the detector didn't
+            // recognize the event
+            return mDetector.onTouchEvent(event);
+
+        }
+    };
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
@@ -85,20 +106,20 @@ public class MainActivity extends CameraActivity
     public boolean onOptionsItemSelected(MenuItem item)
     {
         int id = item.getItemId();
-        VibrationModule VibrationModule = new VibrationModule(500, getApplicationContext());
+        vibrationModule = new VibrationModule(500, getApplicationContext());
         speechService = new SpeechService(this);
 
         if (id == R.id.setting_settings)
         {
-            VibrationModule.execute();
-            speechService.textToSpeech("Settings is open");
+            vibrationModule.execute();
+            speechService.textToSpeech("Opening settings");
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.help_settings)
         {
-            VibrationModule.execute();
-            speechService.textToSpeech("Help is open");
+            vibrationModule.execute();
+            speechService.textToSpeech("Opening help");
             Intent intent = new Intent(MainActivity.this, HelpActivity.class);
             startActivity(intent);
             return true;
@@ -111,6 +132,9 @@ public class MainActivity extends CameraActivity
     {
         super.onCreate(savedInstanceState);
 
+        mDetector = new GestureDetector(this, new MyGestureListener());
+        View rootView = findViewById(R.id.root_main);
+        rootView.setOnTouchListener(touchListener);
 
         //start background BackgroundService
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -122,12 +146,12 @@ public class MainActivity extends CameraActivity
 
         //speech
         speechService = new SpeechService(this);
-        speechService.textToSpeech("Application started");
+        speechService.textToSpeech("Starting vision");
 
 
         /*start vibrate*/
-        VibrationModule VibrationModule = new VibrationModule(500, getApplicationContext());
-        VibrationModule.execute();
+        vibrationModule = new VibrationModule(500, getApplicationContext());
+        vibrationModule.execute();
 
         SharedPreferences pref = getApplicationContext().getSharedPreferences("VolumeValue", 0); // 0 - for private mode
         SharedPreferences.Editor editor = pref.edit();
@@ -255,63 +279,63 @@ public class MainActivity extends CameraActivity
             ImageUtils.saveBitmap(croppedBitmap);
         }
 
-        runInBackground(
-                new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        LOGGER.i("Running detection on image " + currTimestamp);
-                        final long startTime = SystemClock.uptimeMillis();
-                        final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
-                        lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
-
-                        cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
-                        final Canvas canvas = new Canvas(cropCopyBitmap);
-                        final Paint paint = new Paint();
-                        paint.setColor(Color.RED);
-                        paint.setStyle(Paint.Style.STROKE);
-                        paint.setStrokeWidth(2.0f);
-
-                        float minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
-                        switch (MODE)
-                        {
-                            case TF_OD_API:
-                                minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
-                                break;
-                        }
-
-                        final List<Classifier.Recognition> mappedRecognitions =
-                                new LinkedList<Classifier.Recognition>();
-
-                        double maxConfidence = 0;
-                        Classifier.Recognition optimalPrediction = null;
-                        for (final Classifier.Recognition result : results)
-                        {
-
-                            double confidence = result.getConfidence();
-                            if (result.getLocation() != null && confidence >= minimumConfidence && confidence > maxConfidence)
-                            {
-                                optimalPrediction = result;
-
-                            }
-                        }
-                        if (optimalPrediction != null)
-                        {
-                            final RectF location = optimalPrediction.getLocation();
-                            canvas.drawRect(location, paint);
-                            cropToFrameTransform.mapRect(location);
-                            optimalPrediction.setLocation(location);
-                            mappedRecognitions.add(optimalPrediction);
-                            speechService.textToSpeech(getFinalCurrencyClass(optimalPrediction.getTitle()));
-                        }
-                        tracker.trackResults(mappedRecognitions, currTimestamp);
-                        trackingOverlay.postInvalidate();
-
-                        computingDetection = false;
-
-                    }
-                });
+//        runInBackground(
+//                new Runnable()
+//                {
+//                    @Override
+//                    public void run()
+//                    {
+//                        LOGGER.i("Running detection on image " + currTimestamp);
+//                        final long startTime = SystemClock.uptimeMillis();
+//                        final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
+//                        lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
+//
+//                        cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
+//                        final Canvas canvas = new Canvas(cropCopyBitmap);
+//                        final Paint paint = new Paint();
+//                        paint.setColor(Color.RED);
+//                        paint.setStyle(Paint.Style.STROKE);
+//                        paint.setStrokeWidth(2.0f);
+//
+//                        float minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
+//                        switch (MODE)
+//                        {
+//                            case TF_OD_API:
+//                                minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
+//                                break;
+//                        }
+//
+//                        final List<Classifier.Recognition> mappedRecognitions =
+//                                new LinkedList<Classifier.Recognition>();
+//
+//                        double maxConfidence = 0;
+//                        Classifier.Recognition optimalPrediction = null;
+//                        for (final Classifier.Recognition result : results)
+//                        {
+//
+//                            double confidence = result.getConfidence();
+//                            if (result.getLocation() != null && confidence >= minimumConfidence && confidence > maxConfidence)
+//                            {
+//                                optimalPrediction = result;
+//
+//                            }
+//                        }
+//                        if (optimalPrediction != null)
+//                        {
+//                            final RectF location = optimalPrediction.getLocation();
+//                            canvas.drawRect(location, paint);
+//                            cropToFrameTransform.mapRect(location);
+//                            optimalPrediction.setLocation(location);
+//                            mappedRecognitions.add(optimalPrediction);
+//                            speechService.textToSpeech(getFinalCurrencyClass(optimalPrediction.getTitle()));
+//                        }
+//                        tracker.trackResults(mappedRecognitions, currTimestamp);
+//                        trackingOverlay.postInvalidate();
+//
+//                        computingDetection = false;
+//
+//                    }
+//                });
     }
 
     @Override
@@ -336,7 +360,113 @@ public class MainActivity extends CameraActivity
 
     private String getFinalCurrencyClass(String result)
     {
-        return result.substring(0,result.length()-1) + " Rupees";
+        return result.substring(0, result.length() - 1) + " Rupees";
     }
 
+    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener
+    {
+
+        @Override
+        public boolean onDown(MotionEvent event)
+        {
+            Log.d("TAG", "onDown: ");
+
+            // don't return false here or else none of the other
+            // gestures will work
+            return true;
+        }
+
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e)
+        {
+            vibrationModule.execute();
+//            LOGGER.i("Running detection on image " + currTimestamp);
+            final long startTime = SystemClock.uptimeMillis();
+            final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
+            lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
+
+            cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
+            final Canvas canvas = new Canvas(cropCopyBitmap);
+            final Paint paint = new Paint();
+            paint.setColor(Color.RED);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeWidth(2.0f);
+
+            float minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
+            switch (MODE)
+            {
+                case TF_OD_API:
+                    minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
+                    break;
+            }
+
+            final List<Classifier.Recognition> mappedRecognitions =
+                    new LinkedList<Classifier.Recognition>();
+
+            double maxConfidence = 0;
+            Classifier.Recognition optimalPrediction = null;
+            for (final Classifier.Recognition result : results)
+            {
+
+                double confidence = result.getConfidence();
+                if (result.getLocation() != null && confidence >= minimumConfidence && confidence > maxConfidence)
+                {
+                    optimalPrediction = result;
+
+                }
+            }
+            if (optimalPrediction != null)
+            {
+                final RectF location = optimalPrediction.getLocation();
+                canvas.drawRect(location, paint);
+                cropToFrameTransform.mapRect(location);
+                optimalPrediction.setLocation(location);
+                mappedRecognitions.add(optimalPrediction);
+                speechService.textToSpeech(getFinalCurrencyClass(optimalPrediction.getTitle()));
+            }
+            else
+            {
+                speechService.textToSpeech("Please hold a currency note to the camera");
+            }
+//            tracker.trackResults(mappedRecognitions, currTimestamp);
+            trackingOverlay.postInvalidate();
+
+            computingDetection = false;
+            return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e)
+        {
+            LOGGER.i("onLongPress: ");
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e)
+        {
+            LOGGER.i("onDoubleTap: ");
+            return true;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                float distanceX, float distanceY)
+        {
+            LOGGER.i("onScroll: ");
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2,
+                               float velocityX, float velocityY)
+        {
+            vibrationModule.execute();
+            speechService.textToSpeech("Opening settings");
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+            return true;
+        }
+    }
 }
+
+
