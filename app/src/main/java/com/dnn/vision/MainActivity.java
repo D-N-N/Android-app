@@ -167,9 +167,7 @@ public class MainActivity extends CameraActivity
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation)
     {
-        final float textSizePx =
-                TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE_DIP, getResources().getDisplayMetrics());
+        final float textSizePx = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, TEXT_SIZE_DIP, getResources().getDisplayMetrics());
         borderedText = new BorderedText(textSizePx);
         borderedText.setTypeface(Typeface.MONOSPACE);
 
@@ -191,9 +189,7 @@ public class MainActivity extends CameraActivity
         {
             e.printStackTrace();
             LOGGER.e(e, "Exception initializing classifier!");
-            Toast toast =
-                    Toast.makeText(
-                            getApplicationContext(), "Classifier could not be initialized", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), "Classifier could not be initialized", Toast.LENGTH_SHORT);
             toast.show();
             finish();
         }
@@ -208,11 +204,7 @@ public class MainActivity extends CameraActivity
         rgbFrameBitmap = Bitmap.createBitmap(previewWidth, previewHeight, Bitmap.Config.ARGB_8888);
         croppedBitmap = Bitmap.createBitmap(cropSize, cropSize, Bitmap.Config.ARGB_8888);
 
-        frameToCropTransform =
-                ImageUtils.getTransformationMatrix(
-                        previewWidth, previewHeight,
-                        cropSize, cropSize,
-                        sensorOrientation, MAINTAIN_ASPECT);
+        frameToCropTransform = ImageUtils.getTransformationMatrix(previewWidth, previewHeight, cropSize, cropSize, sensorOrientation, MAINTAIN_ASPECT);
 
         cropToFrameTransform = new Matrix();
         frameToCropTransform.invert(cropToFrameTransform);
@@ -292,20 +284,27 @@ public class MainActivity extends CameraActivity
                         final List<Classifier.Recognition> mappedRecognitions =
                                 new LinkedList<Classifier.Recognition>();
 
+                        double maxConfidence = 0;
+                        Classifier.Recognition optimalPrediction = null;
                         for (final Classifier.Recognition result : results)
                         {
-                            final RectF location = result.getLocation();
-                            if (location != null && result.getConfidence() >= minimumConfidence)
+
+                            double confidence = result.getConfidence();
+                            if (result.getLocation() != null && confidence >= minimumConfidence && confidence > maxConfidence)
                             {
-                                canvas.drawRect(location, paint);
+                                optimalPrediction = result;
 
-                                cropToFrameTransform.mapRect(location);
-
-                                result.setLocation(location);
-                                mappedRecognitions.add(result);
                             }
                         }
-
+                        if (optimalPrediction != null)
+                        {
+                            final RectF location = optimalPrediction.getLocation();
+                            canvas.drawRect(location, paint);
+                            cropToFrameTransform.mapRect(location);
+                            optimalPrediction.setLocation(location);
+                            mappedRecognitions.add(optimalPrediction);
+                            speechService.textToSpeech(getFinalCurrencyClass(optimalPrediction.getTitle()));
+                        }
                         tracker.trackResults(mappedRecognitions, currTimestamp);
                         trackingOverlay.postInvalidate();
 
@@ -335,5 +334,9 @@ public class MainActivity extends CameraActivity
         TF_OD_API;
     }
 
+    private String getFinalCurrencyClass(String result)
+    {
+        return result.substring(0,result.length()-1) + " Rupees";
+    }
 
 }
