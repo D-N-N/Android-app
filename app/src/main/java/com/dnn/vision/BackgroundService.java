@@ -33,7 +33,7 @@ public class BackgroundService extends Service
         filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_MEDIA_BUTTON);
-        mReceiver = new Receiver();
+        mReceiver = new EventReciever();
         registerReceiver(mReceiver, filter);
         super.onCreate();
     }

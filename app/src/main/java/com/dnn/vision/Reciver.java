@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-class Receiver extends BroadcastReceiver {
+class EventReciever extends BroadcastReceiver {
 
 
     private SharedPreferences prefAppStartKey;
