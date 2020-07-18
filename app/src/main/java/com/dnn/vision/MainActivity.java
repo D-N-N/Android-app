@@ -278,6 +278,7 @@ public class MainActivity extends CameraActivity
         {
             ImageUtils.saveBitmap(croppedBitmap);
         }
+        computingDetection = false;
 
 //        runInBackground(
 //                new Runnable()
@@ -378,7 +379,6 @@ public class MainActivity extends CameraActivity
         public boolean onSingleTapConfirmed(MotionEvent e)
         {
             vibrationModule.execute();
-//            LOGGER.i("Running detection on image " + currTimestamp);
             final long startTime = SystemClock.uptimeMillis();
             final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
             lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
