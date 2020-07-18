@@ -14,7 +14,6 @@ import android.media.AudioManager;
 import android.os.SystemClock;
 import android.support.design.widget.TabLayout;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -31,7 +30,7 @@ import com.dnn.vision.Utilities.ImageUtils;
 import com.dnn.vision.customview.OverlayView;
 import com.dnn.vision.tflite.Classifier;
 import com.dnn.vision.tflite.TFLiteClassifier;
-import com.dnn.vision.tracking.MultiBoxTracker;
+import com.dnn.vision.Utilities.MultiBoxTracker;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -53,7 +52,7 @@ public class MainActivity extends CameraActivity
     // Minimum detection confidence to track a detection.
     private static final float MINIMUM_CONFIDENCE_TF_OD_API = 0.8f;
     private static final boolean MAINTAIN_ASPECT = false;
-    private static Size DESIRED_PREVIEW_SIZE;
+    private static final Size DESIRED_PREVIEW_SIZE = new Size(480,640);
     private static final boolean SAVE_PREVIEW_BITMAP = false;
     private static final float TEXT_SIZE_DIP = 10;
     OverlayView trackingOverlay;
@@ -120,8 +119,7 @@ public class MainActivity extends CameraActivity
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        DESIRED_PREVIEW_SIZE = getDeviceScreenSize();
-        super.onCreate(savedInstanceState);
+       super.onCreate(savedInstanceState);
 
 
 //       tableLayout = findViewById(R.id.tab_layput);
@@ -154,7 +152,7 @@ public class MainActivity extends CameraActivity
         SharedPreferences.Editor editor = pref.edit();
 
         // set volume value from shared memory
-        VolumeValue = pref.getInt("VolumeValue", -1);
+        VolumeValue = pref.getInt("VolumeValue", 5);
         AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
 
@@ -431,12 +429,6 @@ public class MainActivity extends CameraActivity
         return DESIRED_PREVIEW_SIZE;
     }
 
-    private Size getDeviceScreenSize()
-    {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        return new Size(displayMetrics.widthPixels,displayMetrics.heightPixels);
-    }
 
     // Which detection model to use: by default uses Tensorflow Object Detection API frozen
     // checkpoints.

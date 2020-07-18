@@ -1,4 +1,4 @@
-package com.dnn.vision;
+package com.dnn.vision.Fragment;
 
 /*
  * Copyright 2019 The TensorFlow Authors. All Rights Reserved.
@@ -31,6 +31,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dnn.vision.R;
 import com.dnn.vision.customview.AutoFitTextureView;
 import com.dnn.vision.Utilities.ImageUtils;
 import com.dnn.vision.Utilities.Logger;

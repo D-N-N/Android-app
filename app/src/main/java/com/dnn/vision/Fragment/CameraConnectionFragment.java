@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.dnn.vision;
+package com.dnn.vision.Fragment;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,6 +25,7 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -43,6 +45,7 @@ import android.media.ImageReader.OnImageAvailableListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -53,6 +56,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.dnn.vision.R;
 import com.dnn.vision.Utilities.Logger;
 import com.dnn.vision.customview.AutoFitTextureView;
 
@@ -265,6 +269,8 @@ public class CameraConnectionFragment extends Fragment
     protected static Size chooseOptimalSize(final Size[] choices, final int width, final int height)
     {
         final int minSize = Math.max(Math.min(width, height), MINIMUM_PREVIEW_SIZE);
+        final int minHeight = Math.max(height,MINIMUM_PREVIEW_SIZE);
+        final int minWidth = Math.max(width,MINIMUM_PREVIEW_SIZE);
         final Size desiredSize = new Size(width, height);
 
         // Collect the supported resolutions that are at least as big as the preview Surface
@@ -311,11 +317,8 @@ public class CameraConnectionFragment extends Fragment
         }
     }
 
-    public static CameraConnectionFragment newInstance(
-            final ConnectionCallback callback,
-            final OnImageAvailableListener imageListener,
-            final int layout,
-            final Size inputSize)
+    public static CameraConnectionFragment newInstance(final ConnectionCallback callback,final OnImageAvailableListener imageListener,
+                                                        final int layout, final Size inputSize)
     {
         return new CameraConnectionFragment(callback, imageListener, layout, inputSize);
     }
@@ -399,24 +402,19 @@ public class CameraConnectionFragment extends Fragment
     private void setUpCameraOutputs()
     {
         final Activity activity = getActivity();
-        final CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+        final CameraManager manager = (CameraManager)activity.getSystemService(Context.CAMERA_SERVICE);
         try
         {
             final CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
 
-            final StreamConfigurationMap map =
-                    characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
+            final StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
 
             sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
 
             // Danger, W.R.! Attempting to use too large a preview size could  exceed the camera
             // bus' bandwidth limitation, resulting in gorgeous previews but the storage of
             // garbage capture data.
-            previewSize =
-                    chooseOptimalSize(
-                            map.getOutputSizes(SurfaceTexture.class),
-                            inputSize.getWidth(),
-                            inputSize.getHeight());
+            previewSize = chooseOptimalSize(map.getOutputSizes(SurfaceTexture.class), inputSize.getWidth(), inputSize.getHeight());
 
             // We fit the aspect ratio of TextureView to the size of preview we picked.
             final int orientation = getResources().getConfiguration().orientation;
@@ -432,10 +430,8 @@ public class CameraConnectionFragment extends Fragment
             LOGGER.e(e, "Exception!");
         } catch (final NullPointerException e)
         {
-            // Currently an NPE is thrown when the Camera2API is used but not supported on the
-            // device this code runs.
-            ErrorDialog.newInstance(getString(R.string.camera_error))
-                    .show(getChildFragmentManager(), FRAGMENT_DIALOG);
+            // Currently an NPE is thrown when the Camera2API is used but not supported on the device this code runs.
+            ErrorDialog.newInstance(getString(R.string.camera_error)).show(getChildFragmentManager(), FRAGMENT_DIALOG);
             throw new IllegalStateException(getString(R.string.camera_error));
         }
 
@@ -456,6 +452,17 @@ public class CameraConnectionFragment extends Fragment
             if (!cameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS))
             {
                 throw new RuntimeException("Time out waiting to lock camera opening.");
+            }
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+            {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
             }
             manager.openCamera(cameraId, stateCallback, backgroundHandler);
         } catch (final CameraAccessException e)

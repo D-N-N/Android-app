@@ -37,18 +37,14 @@ import android.os.Trace;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Size;
 import android.view.Surface;
-import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dnn.vision.Utilities.ImageUtils;
-import com.dnn.vision.Utilities.Logger;
-
+import com.dnn.vision.Fragment.CameraConnectionFragment;
+import com.dnn.vision.Fragment.LegacyCameraConnectionFragment;
 import com.dnn.vision.Utilities.ImageUtils;
 import com.dnn.vision.Utilities.Logger;
 
