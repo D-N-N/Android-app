@@ -112,14 +112,14 @@ public class MainActivity extends CameraActivity
         if (id == R.id.setting_settings)
         {
             vibrationModule.execute();
-            speechService.textToSpeech("Opening settings");
+            speechService.textToSpeech(getString(R.string.open_settings));
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;
         } else if (id == R.id.help_settings)
         {
             vibrationModule.execute();
-            speechService.textToSpeech("Opening help");
+            speechService.textToSpeech(getString(R.string.open_help));
             Intent intent = new Intent(MainActivity.this, HelpActivity.class);
             startActivity(intent);
             return true;
@@ -146,7 +146,7 @@ public class MainActivity extends CameraActivity
 
         //speech
         speechService = new SpeechService(this);
-        speechService.textToSpeech("Starting vision");
+        speechService.textToSpeech(getString(R.string.app_start));
 
 
         /*start vibrate*/
@@ -369,10 +369,8 @@ public class MainActivity extends CameraActivity
         @Override
         public boolean onDown(MotionEvent event)
         {
-            Log.d("TAG", "onDown: ");
+            LOGGER.d("onDown: ");
 
-            // don't return false here or else none of the other
-            // gestures will work
             return true;
         }
 
@@ -426,7 +424,7 @@ public class MainActivity extends CameraActivity
             }
             else
             {
-                speechService.textToSpeech("Please hold a currency note to the camera");
+                speechService.textToSpeech(getString(R.string.detection_failure_message));
             }
 //            tracker.trackResults(mappedRecognitions, currTimestamp);
             trackingOverlay.postInvalidate();
@@ -461,7 +459,7 @@ public class MainActivity extends CameraActivity
                                float velocityX, float velocityY)
         {
             vibrationModule.execute();
-            speechService.textToSpeech("Opening settings");
+            speechService.textToSpeech(getString(R.string.open_settings));
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
             return true;

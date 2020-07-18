@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">Vision</string>
-
     <string name="camera_error" translation_description="Error regarding camera support[CHAR_LIMIT=40]">This device doesn\'t support Camera2 API.</string>
+    <string name="app_start">Starting vision</string>
+    <string name="open_settings">Opening settings</string>
+    <string name="open_help">Opening help</string>
+    <string name="detection_failure_message">Please hold a currency note to the camera</string>
     <string-array name="buttons_list">
         <item>Screen ON</item>
         <item>Media Connect</item>
