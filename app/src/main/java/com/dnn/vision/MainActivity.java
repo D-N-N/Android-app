@@ -1,11 +1,9 @@
-package com.example.vision;
+package com.dnn.vision;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -18,13 +16,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.example.vision.Fragment.CurrencyFragment;
-import com.example.vision.Fragment.TextFragment;
-import com.example.vision.Settings.vibretor;
+import com.dnn.vision.Fragment.CurrencyFragment;
+import com.dnn.vision.Fragment.TextFragment;
+import com.dnn.vision.Settings.vibretor;
+import com.dnn.vision.R;
 
-import java.security.Provider;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {

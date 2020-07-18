@@ -1,13 +1,10 @@
-package com.example.vision;
+package com.dnn.vision;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.Toast;
 
 public class service extends Service {

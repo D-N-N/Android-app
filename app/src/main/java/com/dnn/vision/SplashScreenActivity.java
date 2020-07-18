@@ -1,4 +1,4 @@
-package com.example.vision;
+package com.dnn.vision;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.example.vision.Settings.vibretor;
+import com.dnn.vision.Settings.vibretor;
+import com.dnn.vision.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

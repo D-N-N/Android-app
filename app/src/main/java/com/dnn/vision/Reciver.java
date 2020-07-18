@@ -1,12 +1,9 @@
-package com.example.vision;
+package com.dnn.vision;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import java.security.Provider;
 
 class Receiver extends BroadcastReceiver {
 

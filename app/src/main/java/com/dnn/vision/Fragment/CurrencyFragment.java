@@ -1,4 +1,4 @@
-package com.example.vision.Fragment;
+package com.dnn.vision.Fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,30 +8,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.vision.R;
+import com.dnn.vision.R;
 
-public class TextFragment extends Fragment {
+public class CurrencyFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.text,null);
+        return inflater.inflate(R.layout.currency,null);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
         super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -40,7 +30,18 @@ public class TextFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.example.vision.Settings;
+package com.dnn.vision.Settings;
 
 import android.content.Context;
 import android.os.Build;

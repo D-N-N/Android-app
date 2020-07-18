@@ -1,10 +1,8 @@
-package com.example.vision;
+package com.dnn.vision;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.os.Build;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,7 +13,8 @@ import android.widget.ArrayAdapter;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
-import com.example.vision.Settings.vibretor;
+import com.dnn.vision.Settings.vibretor;
+import com.dnn.vision.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

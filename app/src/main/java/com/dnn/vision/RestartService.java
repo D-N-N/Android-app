@@ -1,9 +1,8 @@
-package com.example.vision;
+package com.dnn.vision;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 
 
 public class RestartService extends BroadcastReceiver {

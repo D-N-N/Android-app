@@ -1,9 +1,11 @@
-package com.example.vision;
+package com.dnn.vision;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import com.dnn.vision.R;
 
 public class HelpActivity extends AppCompatActivity {
 

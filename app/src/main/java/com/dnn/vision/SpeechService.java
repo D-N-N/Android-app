@@ -1,4 +1,4 @@
-package com.example.vision;
+package com.dnn.vision;
 
 import android.app.Activity;
 import android.app.Application;
