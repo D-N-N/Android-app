@@ -17,7 +17,8 @@
             android:name="com.dnn.vision.SplashScreenActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name="com.dnn.vision.SettingsActivity" />
-        <activity android:name="com.dnn.vision.MainActivity">
+        <activity android:name="com.dnn.vision.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW"/>
