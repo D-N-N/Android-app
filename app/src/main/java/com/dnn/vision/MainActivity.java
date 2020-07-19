@@ -81,6 +81,7 @@ public class MainActivity extends CameraActivity
     protected VibrationModule vibrationModule;
 
     private Activity activity;
+    LightSensor lightSensor;
 
     View.OnTouchListener touchListener = new View.OnTouchListener()
     {
@@ -165,33 +166,10 @@ public class MainActivity extends CameraActivity
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
 
 
-        LightSensor lightSensor = new LightSensor(this);
+        lightSensor = new LightSensor(this);
         activity = this;
     }
 
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event)
-//    {
-//
-//        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
-//        {
-//
-//
-//            if (Tab_Index == 0)
-//            {
-//                tableLayout.getTabAt(1).select();
-//                Tab_Index++;
-//            } else
-//            {
-//                tableLayout.getTabAt(0).select();
-//                Tab_Index--;
-//            }
-//            return true;
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
 
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation)
@@ -426,8 +404,7 @@ public class MainActivity extends CameraActivity
                 optimalPrediction.setLocation(location);
                 mappedRecognitions.add(optimalPrediction);
                 speechService.textToSpeech(getFinalCurrencyClass(optimalPrediction.getTitle()));
-            }
-            else
+            } else
             {
                 speechService.textToSpeech(getString(R.string.detection_failure_message));
             }
@@ -448,7 +425,7 @@ public class MainActivity extends CameraActivity
         public boolean onDoubleTap(MotionEvent e)
         {
             LOGGER.d("Tapped");
-            if(hasFlash)
+            if (hasFlash)
             {
                 flasher.toggleFlash();
             }

@@ -20,7 +20,6 @@ import android.app.Fragment;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
-import android.hardware.camera2.CaptureRequest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -40,7 +39,7 @@ import com.dnn.vision.Utilities.Logger;
 import java.io.IOException;
 import java.util.List;
 
-public class LegacyCameraConnectionFragment extends Fragment implements illuminatable
+public class LegacyCameraConnectionFragment extends Fragment implements Illuminatable
 {
     private static final Logger LOGGER = new Logger();
     /**

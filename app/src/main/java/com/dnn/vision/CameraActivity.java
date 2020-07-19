@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.dnn.vision.Fragment.CameraConnectionFragment;
 import com.dnn.vision.Fragment.LegacyCameraConnectionFragment;
-import com.dnn.vision.Fragment.illuminatable;
+import com.dnn.vision.Fragment.Illuminatable;
 import com.dnn.vision.Utilities.ImageUtils;
 import com.dnn.vision.Utilities.Logger;
 
@@ -56,7 +56,7 @@ public abstract class CameraActivity extends AppCompatActivity
     private Runnable imageConverter;
     private CameraManager cameraManager;
     protected boolean hasFlash;
-    protected illuminatable flasher;
+    protected Illuminatable flasher;
 
 
     @Override

@@ -71,7 +71,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 @SuppressLint("ValidFragment")
-public class CameraConnectionFragment extends Fragment implements illuminatable
+public class CameraConnectionFragment extends Fragment implements Illuminatable
 {
     private static final Logger LOGGER = new Logger();
 

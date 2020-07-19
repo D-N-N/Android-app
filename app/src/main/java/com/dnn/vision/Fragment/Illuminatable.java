@@ -1,6 +1,6 @@
 package com.dnn.vision.Fragment;
 
-public interface illuminatable
+public interface Illuminatable
 {
     boolean toggleFlash();
 }
