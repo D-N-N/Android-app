@@ -22,9 +22,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:screenOrientation="portrait"/>
         <activity
-            android:name="com.dnn.vision.SettingsActivity"
-            android:screenOrientation="portrait"/>
-        <activity
             android:name="com.dnn.vision.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">

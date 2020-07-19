@@ -109,14 +109,7 @@ public class MainActivity extends CameraActivity
         vibrationModule = new VibrationModule(500, getApplicationContext());
         speechService = new SpeechService(this);
 
-        if (id == R.id.setting_settings)
-        {
-            vibrationModule.execute();
-            speechService.textToSpeech(getString(R.string.open_settings));
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.help_settings)
+      if (id == R.id.help_settings)
         {
             vibrationModule.execute();
             speechService.textToSpeech(getString(R.string.open_help));
@@ -385,10 +378,6 @@ public class MainActivity extends CameraActivity
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY)
         {
-            vibrationModule.execute();
-            speechService.textToSpeech(getString(R.string.open_settings));
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
             return true;
         }
     }
