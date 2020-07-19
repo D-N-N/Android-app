@@ -414,7 +414,9 @@ public abstract class CameraActivity extends AppCompatActivity
 
         } else
         {
-            fragment = new LegacyCameraConnectionFragment(this, getLayoutId(), getDesiredPreviewFrameSize());
+            LegacyCameraConnectionFragment temp = new LegacyCameraConnectionFragment(this, getLayoutId(), getDesiredPreviewFrameSize());
+            fragment = temp;
+            flasher = temp;
         }
         LOGGER.d("Setting the fragment");
         getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
