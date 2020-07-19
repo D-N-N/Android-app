@@ -319,8 +319,8 @@ public class CameraConnectionFragment extends Fragment implements illuminatable
         }
     }
 
-    public static CameraConnectionFragment newInstance(final ConnectionCallback callback,final OnImageAvailableListener imageListener,
-                                                        final int layout, final Size inputSize)
+    public static CameraConnectionFragment newInstance(final ConnectionCallback callback, final OnImageAvailableListener imageListener,
+                                                       final int layout, final Size inputSize)
     {
         return new CameraConnectionFragment(callback, imageListener, layout, inputSize);
     }
@@ -403,7 +403,7 @@ public class CameraConnectionFragment extends Fragment implements illuminatable
     private void setUpCameraOutputs()
     {
         final Activity activity = getActivity();
-        final CameraManager manager = (CameraManager)activity.getSystemService(Context.CAMERA_SERVICE);
+        final CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
         try
         {
             final CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
@@ -557,9 +557,7 @@ public class CameraConnectionFragment extends Fragment implements illuminatable
             LOGGER.i("Opening camera preview: " + previewSize.getWidth() + "x" + previewSize.getHeight());
 
             // Create the reader for the preview frames.
-            previewReader =
-                    ImageReader.newInstance(
-                            previewSize.getWidth(), previewSize.getHeight(), ImageFormat.YUV_420_888, 2);
+            previewReader = ImageReader.newInstance(previewSize.getWidth(), previewSize.getHeight(), ImageFormat.YUV_420_888, 2);
 
             previewReader.setOnImageAvailableListener(imageListener, backgroundHandler);
             previewRequestBuilder.addTarget(previewReader.getSurface());
@@ -588,13 +586,11 @@ public class CameraConnectionFragment extends Fragment implements illuminatable
                                         CaptureRequest.CONTROL_AF_MODE,
                                         CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
                                 // Flash is automatically enabled when necessary.
-                                previewRequestBuilder.set(
-                                        CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
+                                previewRequestBuilder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON_AUTO_FLASH);
 
                                 // Finally, we start displaying the camera preview.
                                 previewRequest = previewRequestBuilder.build();
-                                captureSession.setRepeatingRequest(
-                                        previewRequest, captureCallback, backgroundHandler);
+                                captureSession.setRepeatingRequest(previewRequest, captureCallback, backgroundHandler);
                             } catch (final CameraAccessException e)
                             {
                                 LOGGER.e(e, "Exception!");
@@ -655,36 +651,35 @@ public class CameraConnectionFragment extends Fragment implements illuminatable
     @RequiresApi(api = Build.VERSION_CODES.M)
     public boolean toggleFlash()
     {
-
         final SurfaceTexture texture = textureView.getSurfaceTexture();
         assert texture != null;
-
-
         texture.setDefaultBufferSize(previewSize.getWidth(), previewSize.getHeight());
-        final Surface surface = new Surface(texture);
 
+        final Surface surface = new Surface(texture);
 
         try
         {
             CaptureRequest.Builder builder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
             builder.addTarget(surface);
 
-            if(flashOn)
-            {
+            builder.addTarget(previewReader.getSurface());
 
+            builder.set(CaptureRequest.CONTROL_AF_MODE, CaptureRequest.CONTROL_AF_MODE_CONTINUOUS_PICTURE);
+            if (flashOn)
+            {
                 builder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
-                builder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
                 flashOn = false;
             } else
             {
                 builder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
-                builder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
                 flashOn = true;
+                LOGGER.d("Turning flash on");
             }
-            captureSession.setRepeatingRequest(builder.build(), null, null);
+            captureSession.setRepeatingRequest(builder.build(), captureCallback, backgroundHandler);
+
         } catch (CameraAccessException e)
         {
-            LOGGER.e(e,"Exception when toggling flash");
+            LOGGER.e(e, "Exception when toggling flash");
         }
         return flashOn;
     }
