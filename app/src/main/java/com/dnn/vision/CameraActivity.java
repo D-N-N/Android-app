@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.dnn.vision.Fragment.CameraConnectionFragment;
 import com.dnn.vision.Fragment.LegacyCameraConnectionFragment;
+import com.dnn.vision.Fragment.illuminatable;
 import com.dnn.vision.Utilities.ImageUtils;
 import com.dnn.vision.Utilities.Logger;
 
@@ -53,6 +54,9 @@ public abstract class CameraActivity extends AppCompatActivity
     private int yRowStride;
     private Runnable postInferenceCallback;
     private Runnable imageConverter;
+    private CameraManager cameraManager;
+    protected boolean hasFlash;
+    protected illuminatable flasher;
 
 
     @Override
@@ -63,6 +67,7 @@ public abstract class CameraActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
+        hasFlash = this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         if (hasPermission())
         {
             setFragment();
@@ -342,12 +347,12 @@ public abstract class CameraActivity extends AppCompatActivity
 
     private String chooseCamera()
     {
-        final CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+        cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
         try
         {
-            for (final String cameraId : manager.getCameraIdList())
+            for (final String cameraId : cameraManager.getCameraIdList())
             {
-                final CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
+                final CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
 
                 // We don't use a front facing camera in this sample.
                 final Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
@@ -367,10 +372,8 @@ public abstract class CameraActivity extends AppCompatActivity
                 // Fallback to camera1 API for internal cameras that don't have full support.
                 // This should help with legacy situations where using the camera2 API causes
                 // distorted or otherwise broken previews.
-                useCamera2API =
-                        (facing == CameraCharacteristics.LENS_FACING_EXTERNAL)
-                                || isHardwareLevelSupported(
-                                characteristics);
+                useCamera2API = (facing == CameraCharacteristics.LENS_FACING_EXTERNAL) || isHardwareLevelSupported(
+                        characteristics);
                 LOGGER.i("Camera API lv2?: %s", useCamera2API);
                 return cameraId;
             }
@@ -385,8 +388,8 @@ public abstract class CameraActivity extends AppCompatActivity
     protected void setFragment()
     {
         String cameraId = chooseCamera();
-
         Fragment fragment;
+
         if (useCamera2API)
         {
             CameraConnectionFragment camera2Fragment =
@@ -407,6 +410,8 @@ public abstract class CameraActivity extends AppCompatActivity
 
             camera2Fragment.setCamera(cameraId);
             fragment = camera2Fragment;
+            flasher = camera2Fragment;
+
         } else
         {
             fragment = new LegacyCameraConnectionFragment(this, getLayoutId(), getDesiredPreviewFrameSize());

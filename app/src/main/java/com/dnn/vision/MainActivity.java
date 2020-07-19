@@ -13,7 +13,6 @@ import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.GestureDetector;
@@ -265,7 +264,7 @@ public class MainActivity extends CameraActivity
             return;
         }
         computingDetection = true;
-        LOGGER.i("Preparing image " + currTimestamp + " for detection in bg thread.");
+        LOGGER.d("Preparing image " + currTimestamp + " for detection.");
 
         rgbFrameBitmap.setPixels(getRgbBytes(), 0, previewWidth, 0, 0, previewWidth, previewHeight);
 
@@ -429,7 +428,7 @@ public class MainActivity extends CameraActivity
 //            tracker.trackResults(mappedRecognitions, currTimestamp);
             trackingOverlay.postInvalidate();
 
-            computingDetection = false;
+//            computingDetection = false;
             return true;
         }
 
@@ -442,7 +441,11 @@ public class MainActivity extends CameraActivity
         @Override
         public boolean onDoubleTap(MotionEvent e)
         {
-            LOGGER.i("onDoubleTap: ");
+            LOGGER.d("Tapped");
+            if(hasFlash)
+            {
+                flasher.toggleFlash();
+            }
             return true;
         }
 

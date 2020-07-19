@@ -42,9 +42,11 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.ImageReader;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Size;
@@ -60,7 +62,6 @@ import com.dnn.vision.R;
 import com.dnn.vision.Utilities.Logger;
 import com.dnn.vision.customview.AutoFitTextureView;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -70,7 +71,7 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 @SuppressLint("ValidFragment")
-public class CameraConnectionFragment extends Fragment
+public class CameraConnectionFragment extends Fragment implements illuminatable
 {
     private static final Logger LOGGER = new Logger();
 
@@ -111,6 +112,8 @@ public class CameraConnectionFragment extends Fragment
      * The layout identifier to inflate for this Fragment.
      */
     private final int layout;
+
+    private boolean flashOn = false;
 
     private final ConnectionCallback cameraConnectionCallback;
     private final CameraCaptureSession.CaptureCallback captureCallback =
@@ -269,8 +272,7 @@ public class CameraConnectionFragment extends Fragment
     protected static Size chooseOptimalSize(final Size[] choices, final int width, final int height)
     {
         final int minSize = Math.max(Math.min(width, height), MINIMUM_PREVIEW_SIZE);
-        final int minHeight = Math.max(height,MINIMUM_PREVIEW_SIZE);
-        final int minWidth = Math.max(width,MINIMUM_PREVIEW_SIZE);
+
         final Size desiredSize = new Size(width, height);
 
         // Collect the supported resolutions that are at least as big as the preview Surface
@@ -346,8 +348,7 @@ public class CameraConnectionFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(
-            final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState)
     {
         return inflater.inflate(layout, container, false);
     }
@@ -649,6 +650,43 @@ public class CameraConnectionFragment extends Fragment
             matrix.postRotate(180, centerX, centerY);
         }
         textureView.setTransform(matrix);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public boolean toggleFlash()
+    {
+
+        final SurfaceTexture texture = textureView.getSurfaceTexture();
+        assert texture != null;
+
+
+        texture.setDefaultBufferSize(previewSize.getWidth(), previewSize.getHeight());
+        final Surface surface = new Surface(texture);
+
+
+        try
+        {
+            CaptureRequest.Builder builder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
+            builder.addTarget(surface);
+
+            if(flashOn)
+            {
+
+                builder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
+                captureSession.setRepeatingRequest(builder.build(), null, null);
+                flashOn = false;
+            } else
+            {
+                builder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
+                captureSession.setRepeatingRequest(builder.build(), null, null);
+                flashOn = true;
+            }
+
+        } catch (CameraAccessException e)
+        {
+            LOGGER.e(e,"Exception when toggling flash");
+        }
+        return flashOn;
     }
 
     /**
