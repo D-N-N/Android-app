@@ -4,8 +4,8 @@
     <string name="app_start">Starting vision</string>
     <string name="open_settings">Opening settings</string>
     <string name="open_help">Opening help</string>
-    <string name="detection_failure_message">Please hold a currency note to the camera</string>
-    <string name="flash_on_command">Please double tap to flash on</string>
+    <string name="detection_failure_message">Please hold a currency note to the camera.</string>
+    <string name="flash_on_command"> Low light conditions. Please double tap to turn flash on</string>
     <string-array name="buttons_list">
         <item>Screen ON</item>
         <item>Media Connect</item>

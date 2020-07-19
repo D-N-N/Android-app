@@ -30,7 +30,7 @@ import com.dnn.vision.Utilities.ImageUtils;
 import com.dnn.vision.Utilities.Logger;
 import com.dnn.vision.Utilities.MultiBoxTracker;
 import com.dnn.vision.customview.OverlayView;
-import com.dnn.vision.sensor.LightSensor;
+import com.dnn.vision.sensor.LightSensorEventListener;
 import com.dnn.vision.tflite.Classifier;
 import com.dnn.vision.tflite.TFLiteClassifier;
 
@@ -81,17 +81,13 @@ public class MainActivity extends CameraActivity
     protected VibrationModule vibrationModule;
 
     private Activity activity;
-    private LightSensor lightSensor;
+    private LightSensorEventListener lightSensorEventListener;
 
     View.OnTouchListener touchListener = new View.OnTouchListener()
     {
         @Override
         public boolean onTouch(View v, MotionEvent event)
         {
-            // pass the events to the gesture detector
-            // a return value of true means the detector is handling it
-            // a return value of false means the detector didn't
-            // recognize the event
             return mDetector.onTouchEvent(event);
 
         }
@@ -166,33 +162,10 @@ public class MainActivity extends CameraActivity
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
 
 
-        LightSensor lightSensor = new LightSensor(this);
+        lightSensorEventListener = new LightSensorEventListener(this);
         activity = this;
     }
 
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event)
-//    {
-//
-//        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
-//        {
-//
-//
-//            if (Tab_Index == 0)
-//            {
-//                tableLayout.getTabAt(1).select();
-//                Tab_Index++;
-//            } else
-//            {
-//                tableLayout.getTabAt(0).select();
-//                Tab_Index--;
-//            }
-//            return true;
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
 
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation)
@@ -286,63 +259,6 @@ public class MainActivity extends CameraActivity
         }
         computingDetection = false;
 
-//        runInBackground(
-//                new Runnable()
-//                {
-//                    @Override
-//                    public void run()
-//                    {
-//                        LOGGER.i("Running detection on image " + currTimestamp);
-//                        final long startTime = SystemClock.uptimeMillis();
-//                        final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);
-//                        lastProcessingTimeMs = SystemClock.uptimeMillis() - startTime;
-//
-//                        cropCopyBitmap = Bitmap.createBitmap(croppedBitmap);
-//                        final Canvas canvas = new Canvas(cropCopyBitmap);
-//                        final Paint paint = new Paint();
-//                        paint.setColor(Color.RED);
-//                        paint.setStyle(Paint.Style.STROKE);
-//                        paint.setStrokeWidth(2.0f);
-//
-//                        float minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
-//                        switch (MODE)
-//                        {
-//                            case TF_OD_API:
-//                                minimumConfidence = MINIMUM_CONFIDENCE_TF_OD_API;
-//                                break;
-//                        }
-//
-//                        final List<Classifier.Recognition> mappedRecognitions =
-//                                new LinkedList<Classifier.Recognition>();
-//
-//                        double maxConfidence = 0;
-//                        Classifier.Recognition optimalPrediction = null;
-//                        for (final Classifier.Recognition result : results)
-//                        {
-//
-//                            double confidence = result.getConfidence();
-//                            if (result.getLocation() != null && confidence >= minimumConfidence && confidence > maxConfidence)
-//                            {
-//                                optimalPrediction = result;
-//
-//                            }
-//                        }
-//                        if (optimalPrediction != null)
-//                        {
-//                            final RectF location = optimalPrediction.getLocation();
-//                            canvas.drawRect(location, paint);
-//                            cropToFrameTransform.mapRect(location);
-//                            optimalPrediction.setLocation(location);
-//                            mappedRecognitions.add(optimalPrediction);
-//                            speechService.textToSpeech(getFinalCurrencyClass(optimalPrediction.getTitle()));
-//                        }
-//                        tracker.trackResults(mappedRecognitions, currTimestamp);
-//                        trackingOverlay.postInvalidate();
-//
-//                        computingDetection = false;
-//
-//                    }
-//                });
     }
 
     @Override
@@ -427,15 +343,14 @@ public class MainActivity extends CameraActivity
                 optimalPrediction.setLocation(location);
                 mappedRecognitions.add(optimalPrediction);
                 speechService.textToSpeech(getFinalCurrencyClass(optimalPrediction.getTitle()));
-            }
-            else
+            } else
             {
                 speechService.textToSpeech(getString(R.string.detection_failure_message));
+                lightSensorEventListener.setWarningsStatus(true);
             }
-//            tracker.trackResults(mappedRecognitions, currTimestamp);
+
             trackingOverlay.postInvalidate();
 
-//            computingDetection = false;
             return true;
         }
 
@@ -443,25 +358,26 @@ public class MainActivity extends CameraActivity
         public void onLongPress(MotionEvent e)
         {
             LOGGER.i("onLongPress: ");
+//            lightSensorEventListener.setWarningsStatus(false);
+
         }
 
         @Override
         public boolean onDoubleTap(MotionEvent e)
         {
             LOGGER.d("Tapped");
-            if(hasFlash)
+            if (hasFlash)
             {
                 boolean value = flasher.toggleFlash();
-                lightSensor.setFlashOn(value);
+                lightSensorEventListener.setWarningsStatus(value);
             }
             return true;
         }
 
         @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2,
-                                float distanceX, float distanceY)
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,float distanceX, float distanceY)
         {
-            LOGGER.i("onScroll: ");
+
             return true;
         }
 
