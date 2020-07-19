@@ -673,15 +673,15 @@ public class CameraConnectionFragment extends Fragment implements illuminatable
             {
 
                 builder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF);
-                captureSession.setRepeatingRequest(builder.build(), null, null);
+                builder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_ON);
                 flashOn = false;
             } else
             {
                 builder.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH);
-                captureSession.setRepeatingRequest(builder.build(), null, null);
+                builder.set(CaptureRequest.CONTROL_AE_MODE, CaptureRequest.CONTROL_AE_MODE_OFF);
                 flashOn = true;
             }
-
+            captureSession.setRepeatingRequest(builder.build(), null, null);
         } catch (CameraAccessException e)
         {
             LOGGER.e(e,"Exception when toggling flash");
