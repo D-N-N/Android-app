@@ -81,6 +81,7 @@ public class MainActivity extends CameraActivity
     protected VibrationModule vibrationModule;
 
     private Activity activity;
+    private LightSensor lightSensor;
 
     View.OnTouchListener touchListener = new View.OnTouchListener()
     {
@@ -165,7 +166,7 @@ public class MainActivity extends CameraActivity
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
 
 
-        LightSensor lightSensor = new LightSensor(this);
+        lightSensor = new LightSensor(this);
         activity = this;
     }
 
@@ -450,7 +451,8 @@ public class MainActivity extends CameraActivity
             LOGGER.d("Tapped");
             if(hasFlash)
             {
-                flasher.toggleFlash();
+                boolean value = flasher.toggleFlash();
+                lightSensor.setFlashOn(value);
             }
             return true;
         }
