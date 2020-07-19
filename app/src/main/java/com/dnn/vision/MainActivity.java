@@ -1,5 +1,6 @@
 package com.dnn.vision;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +30,7 @@ import com.dnn.vision.Utilities.ImageUtils;
 import com.dnn.vision.Utilities.Logger;
 import com.dnn.vision.Utilities.MultiBoxTracker;
 import com.dnn.vision.customview.OverlayView;
+import com.dnn.vision.sensor.LightSensor;
 import com.dnn.vision.tflite.Classifier;
 import com.dnn.vision.tflite.TFLiteClassifier;
 
@@ -77,6 +79,8 @@ public class MainActivity extends CameraActivity
     private SpeechService speechService;
     private GestureDetector mDetector;
     protected VibrationModule vibrationModule;
+
+    private Activity activity;
 
     View.OnTouchListener touchListener = new View.OnTouchListener()
     {
@@ -161,6 +165,8 @@ public class MainActivity extends CameraActivity
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
 
 
+        LightSensor lightSensor = new LightSensor(this);
+        activity = this;
     }
 
 
