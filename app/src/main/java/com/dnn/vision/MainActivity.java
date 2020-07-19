@@ -17,6 +17,7 @@ import android.os.SystemClock;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -118,6 +119,21 @@ public class MainActivity extends CameraActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        int keyCode = event.getKeyCode();
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                speechService.textToSpeech("increasing volume");
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                speechService.textToSpeech("decreasing volume");
+                return true;
+            default:
+                return super.dispatchKeyEvent(event);
+        }
     }
 
     @Override
