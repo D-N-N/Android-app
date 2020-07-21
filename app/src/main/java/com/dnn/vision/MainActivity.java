@@ -17,6 +17,7 @@ import android.os.SystemClock;
 import android.util.Size;
 import android.util.TypedValue;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -98,7 +99,7 @@ public class MainActivity extends CameraActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.settings, menu);
+        menuInflater.inflate(R.menu.app_bar_menu, menu);
         return true;
     }
 
@@ -109,14 +110,7 @@ public class MainActivity extends CameraActivity
         vibrationModule = new VibrationModule(500, getApplicationContext());
         speechService = new SpeechService(this);
 
-        if (id == R.id.setting_settings)
-        {
-            vibrationModule.execute();
-            speechService.textToSpeech(getString(R.string.open_settings));
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.help_settings)
+        if (id == R.id.help_menu)
         {
             vibrationModule.execute();
             speechService.textToSpeech(getString(R.string.open_help));
@@ -128,11 +122,30 @@ public class MainActivity extends CameraActivity
     }
 
     @Override
+    public boolean dispatchKeyEvent(KeyEvent event)
+    {
+        if (event.getAction() != KeyEvent.ACTION_DOWN)
+            return true;
+        int keyCode = event.getKeyCode();
+        switch (keyCode)
+        {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                speechService.textToSpeech("increasing volume");
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                speechService.textToSpeech("decreasing volume");
+                return true;
+            default:
+                return super.dispatchKeyEvent(event);
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
-        mDetector = new GestureDetector(this, new MyGestureListener());
+        mDetector = new GestureDetector(this, new MainGestureListener());
         View rootView = findViewById(R.id.root_main);
         rootView.setOnTouchListener(touchListener);
 
@@ -166,6 +179,12 @@ public class MainActivity extends CameraActivity
         activity = this;
     }
 
+    @Override
+    public synchronized void onStart()
+    {
+        super.onStart();
+        speechService.textToSpeech(getString(R.string.currency_detection_mode));
+    }
 
     @Override
     public void onPreviewSizeChosen(final Size size, final int rotation)
@@ -286,7 +305,7 @@ public class MainActivity extends CameraActivity
         return result.substring(0, result.length() - 1) + " Rupees";
     }
 
-    private class MyGestureListener extends GestureDetector.SimpleOnGestureListener
+    private class MainGestureListener extends GestureDetector.SimpleOnGestureListener
     {
 
         @Override
@@ -358,14 +377,14 @@ public class MainActivity extends CameraActivity
         public void onLongPress(MotionEvent e)
         {
             LOGGER.i("onLongPress: ");
-//            lightSensorEventListener.setWarningsStatus(false);
-
+            Intent intent = new Intent(MainActivity.this, HelpActivity.class);
+            startActivity(intent);
         }
 
         @Override
         public boolean onDoubleTap(MotionEvent e)
         {
-            LOGGER.d("Tapped");
+            LOGGER.d("Double Tapped");
             if (hasFlash)
             {
                 boolean value = flasher.toggleFlash();
@@ -374,23 +393,7 @@ public class MainActivity extends CameraActivity
             return true;
         }
 
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2,float distanceX, float distanceY)
-        {
 
-            return true;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent event1, MotionEvent event2,
-                               float velocityX, float velocityY)
-        {
-            vibrationModule.execute();
-            speechService.textToSpeech(getString(R.string.open_settings));
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-            return true;
-        }
     }
 }
 
