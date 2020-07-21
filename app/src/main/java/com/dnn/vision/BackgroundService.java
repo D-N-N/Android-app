@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
-import android.widget.Toast;
+
+import com.dnn.vision.Utilities.Logger;
 
 public class BackgroundService extends Service
 {
     BroadcastReceiver mReceiver;
     IntentFilter filter;
+    private static final Logger LOGGER = new Logger();
 
     @Override
     public IBinder onBind(Intent intent)
@@ -21,8 +23,8 @@ public class BackgroundService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Toast.makeText(this, "Service started by user.", Toast.LENGTH_LONG).show();
 
+        LOGGER.d("Background service started");
         return START_STICKY;
     }
 
@@ -33,7 +35,7 @@ public class BackgroundService extends Service
         filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(Intent.ACTION_MEDIA_BUTTON);
-        mReceiver = new EventReciever();
+        mReceiver = new EventReceiver();
         registerReceiver(mReceiver, filter);
         super.onCreate();
     }
@@ -48,7 +50,7 @@ public class BackgroundService extends Service
         Intent broadcastIntent = new Intent(this, RestartService.class);
         this.sendBroadcast(broadcastIntent);
 
-        Toast.makeText(this, "Service destroyed by user.", Toast.LENGTH_LONG).show();
+        LOGGER.d("Background service destroyed");
     }
 
     @Override
@@ -59,24 +61,5 @@ public class BackgroundService extends Service
         super.onTaskRemoved(rootIntent);
     }
 
-    //    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if(event.getAction() == KeyEvent.ACTION_DOWN) {
-//
-//            Intent dialogIntent = new Intent(this,MainActivity.class);
-//            switch(keyCode) {
-//                case KeyEvent.KEYCODE_HEADSETHOOK:
-//                    dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(dialogIntent);
-//                    return true;
-//                case KeyEvent.KEYCODE_B:
-//                    dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(dialogIntent);
-//                    return true;
-//
-//                //etc.
-//            }
-//        }
-//
-//        return super.onKeyDown(keyCode, event);
-//    }
+
 }
