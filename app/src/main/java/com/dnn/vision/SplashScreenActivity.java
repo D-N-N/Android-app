@@ -17,9 +17,9 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
         SpeechService speechService = new SpeechService(this);
-        speechService.textToSpeech("Application sleep");
+        speechService.textToSpeech(this.getString(R.string.app_sleep_feedback));
 
-        RelativeLayout layout = (RelativeLayout)findViewById(R.id.splash);
+        RelativeLayout layout = findViewById(R.id.splash);
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

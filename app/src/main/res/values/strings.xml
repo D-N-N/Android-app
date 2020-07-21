@@ -1,11 +1,18 @@
 <resources>
     <string name="app_name">Vision</string>
     <string name="camera_error" translation_description="Error regarding camera support[CHAR_LIMIT=40]">This device doesn\'t support Camera2 API.</string>
-    <string name="app_start">Starting vision</string>
+    <string name="app_start">Starting vision…</string>
+    <string name="currency_detection_mode">Vision is now in currency detection mode. Long press the screen to open help.</string>
     <string name="open_settings">Opening settings</string>
     <string name="open_help">Opening help</string>
     <string name="detection_failure_message">Please hold a currency note to the camera.</string>
     <string name="flash_on_command"> Low light conditions. Please double tap to turn flash on</string>
+    <string name="navigation_title">Navigation</string>
+    <string name="navigation_text">1. Long press the screen to open help from main screen. \n2. Long press the screen to open main screen from help. </string>
+    <string name="currency_detection_help_title">Currency Detection</string>
+    <string name="currency_detection_help_text">1. Tap the screen once to start currency recognition. \n2. Double tap the screen to toggle the flash light.</string>
+    <string name="app_sleep_feedback">Application is in sleep mode</string>
+    <string name="help">Help</string>
     <string-array name="buttons_list">
         <item>Screen ON</item>
         <item>Media Connect</item>
