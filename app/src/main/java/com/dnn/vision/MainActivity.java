@@ -124,15 +124,22 @@ public class MainActivity extends CameraActivity
     @Override
     public boolean dispatchKeyEvent(KeyEvent event)
     {
+
         if (event.getAction() != KeyEvent.ACTION_DOWN)
-            return true;
+            return super.dispatchKeyEvent(event);
+
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         int keyCode = event.getKeyCode();
         switch (keyCode)
         {
             case KeyEvent.KEYCODE_VOLUME_UP:
+                VolumeValue = VolumeValue+1;
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
                 speechService.textToSpeech("increasing volume");
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
+                VolumeValue = VolumeValue-1;
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, VolumeValue, 0);
                 speechService.textToSpeech("decreasing volume");
                 return true;
             default:
